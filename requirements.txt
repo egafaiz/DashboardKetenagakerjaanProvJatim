@@ -2,3 +2,5 @@ streamlit>=1.38
 pandas
 pyarrow
 plotly
+openpyxl
+
