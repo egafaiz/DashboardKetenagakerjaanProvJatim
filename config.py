@@ -1,16 +1,6 @@
-"""
-config.py
----------
-Konfigurasi pusat: path data, palet warna, label kolom, format tabel.
-Semua halaman (Home.py + pages/*.py) mengimpor modul ini agar tampilan
-dan penamaan konsisten di seluruh dashboard.
-"""
 
 from pathlib import Path
 
-# ----------------------------------------------------------------------
-# PATH
-# ----------------------------------------------------------------------
 BASE_DIR = Path(__file__).parent
 DATA_DIR = BASE_DIR / "data" / "processed"
 RAW_DIR = BASE_DIR / "data" / "raw"
@@ -22,17 +12,11 @@ PATH_GEOJSON = GEOJSON_DIR / "jatim_38_kabkota.geojson"
 
 GEOJSON_FEATURE_ID_KEY = "properties.Kabupaten/Kota"
 
-# ----------------------------------------------------------------------
-# METADATA SUMBER DATA
-# ----------------------------------------------------------------------
 SUMBER_PRIMER = "BPS Jatim – Keadaan Angkatan Kerja Jatim, Agustus 2025 (rilis 17 Maret 2026)"
 SUMBER_PENDAMPING = "BPS Jatim – BRS Jumlah Angkatan Kerja Jatim, Februari 2026 (rilis 5 Mei 2026)"
 SUMBER_API_BPS = "BPS Web API (webapi.bps.go.id), domain Jawa Timur — TPT var_id 54, TPAK var_id 277"
 TANGGAL_UPDATE_DASHBOARD = "Juli 2026"
 
-# ----------------------------------------------------------------------
-# PALET WARNA — Modern Enterprise / SaaS Dashboard
-# ----------------------------------------------------------------------
 COLOR_PRIMARY = "#2563EB"
 COLOR_PRIMARY_DARK = "#1D4ED8"
 COLOR_INK = "#1F2937"
@@ -49,10 +33,8 @@ COLOR_SUCCESS = "#16A34A"
 
 TIPE_WILAYAH_WARNA = {"Kabupaten": "#2563EB", "Kota": "#F59E0B"}
 
-# Sequential (bukan diverging merah-hijau) — aman untuk buta warna deuteranopia/protanopia
 CHOROPLETH_SCALE = "YlOrRd"
 
-# Warna tier risiko (Bagian 12) — konsisten dgn semantik: hijau=aman, merah=perlu perhatian
 TIER_RISIKO_WARNA = {"Rendah": "#16A34A", "Sedang": "#D97706", "Tinggi": "#DC2626"}
 
 BADGE_KABKOTA_BG, BADGE_KABKOTA_BORDER, BADGE_KABKOTA_TEXT = "#EFF6FF", "#BFDBFE", "#1D4ED8"
@@ -70,9 +52,6 @@ SEKTOR_WARNA = [
     "#FCA5A5", "#22C55E",
 ]
 
-# ----------------------------------------------------------------------
-# LABEL & FORMAT KOLOM TABEL
-# ----------------------------------------------------------------------
 LABEL_KOLOM = {
     "Kabupaten/Kota": "Kabupaten/Kota", "kabkota": "Kabupaten/Kota",
     "tipe_wilayah": "Tipe Wilayah",
@@ -126,11 +105,7 @@ FORMAT_KOLOM = {
     "tahun": "teks",
 }
 
-
 def plotly_config(nama_file: str) -> dict:
-    """Toolbar Plotly diringkas jadi HANYA tombol unduh gambar (kamera) —
-    tombol zoom/pan/lasso/select/autoscale disembunyikan karena mengganggu
-    dan jarang dipakai pengunjung awam."""
     return {
         "displaylogo": False,
         "displayModeBar": True,

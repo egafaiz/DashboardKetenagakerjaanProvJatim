@@ -17,7 +17,6 @@ utils.page_header(
     "Wilayah mana yang perlu perhatian lebih dulu — berbasis skor risiko relatif, bukan ambang prediktif.",
 )
 
-# ── Ringkasan tier ────────────────────────────────────────────
 n_tinggi = (skor_risiko["tier_risiko"] == "Tinggi").sum()
 n_sedang = (skor_risiko["tier_risiko"] == "Sedang").sum()
 n_rendah = (skor_risiko["tier_risiko"] == "Rendah").sum()
@@ -28,7 +27,6 @@ col3.metric("Tier Rendah", f"{n_rendah} wilayah")
 
 st.markdown("")
 
-# ── Skor risiko early-warning ────────────────────────────────
 with st.container(border=True):
     utils.section_label("Early-Warning", "Skor Risiko Kab/Kota (2025)",
                          "Skor relatif (percentile) terhadap 38 kab/kota di tahun yang sama — flag wilayah "
@@ -70,7 +68,6 @@ with st.container(border=True):
 
 st.markdown("")
 
-# ── Profil volatilitas ─────────────────────────────────────────
 with st.container(border=True):
     utils.section_label("Volatilitas", "Profil Volatilitas & Dampak Krisis — Ringkasan",
                          "Lihat halaman Tren Terkini untuk visualisasi lengkap; tabel di bawah untuk referensi cepat.")
@@ -79,7 +76,6 @@ with st.container(border=True):
 
 st.markdown("")
 
-# ── Rekomendasi naratif ─────────────────────────────────────────
 with st.container(border=True):
     utils.section_label("Rekomendasi", "Ringkasan untuk Pengambil Kebijakan")
     top3 = skor_risiko.sort_values("skor_risiko", ascending=False).head(3)["Kabupaten/Kota"].tolist()
@@ -128,7 +124,6 @@ with st.container(border=True):
 
 st.markdown("")
 
-# ── Halaman Metodologi ───────────────────────────────────────────
 with st.container(border=True):
     utils.section_label("Metodologi", "Sumber Data, Keputusan, dan Keterbatasan")
 

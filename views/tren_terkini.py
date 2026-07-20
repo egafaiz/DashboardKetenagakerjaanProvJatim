@@ -11,7 +11,6 @@ data = utils.guard_data_loaded()
 historis = data["historis_gabungan"].copy()
 profil_vol = data["profil_volatilitas"].copy()
 
-
 st.markdown("<div style='margin-top: 40px;'></div>", unsafe_allow_html=True)
 utils.page_header(
     "Historis 2008–2025 · Volatilitas · Dampak Krisis",
@@ -22,7 +21,6 @@ utils.page_header(
 
 wilayah_list = sorted(historis["Kabupaten/Kota"].unique())
 
-# ── Tren historis per kab/kota ────────────────────────────────
 with st.container(border=True):
     utils.section_label("Tren Historis", "TPT & TPAK per Kabupaten/Kota (2008–2025)")
     wilayah_pilihan = st.selectbox("Pilih Kabupaten/Kota", wilayah_list,
@@ -63,7 +61,6 @@ with st.container(border=True):
 
 st.markdown("")
 
-# ── Profil volatilitas ──────────────────────────────────────────
 with st.container(border=True):
     utils.section_label("Volatilitas", "Wilayah Paling Stabil vs Paling Fluktuatif",
                          "Diukur dari standar deviasi (std) TPT sepanjang 2008–2025 — semakin tinggi, "
@@ -97,7 +94,6 @@ with st.container(border=True):
 
 st.markdown("")
 
-# ── Dampak krisis 2008 vs COVID-19 ───────────────────────────────
 with st.container(border=True):
     utils.section_label("Dampak Krisis", "Krisis Finansial 2008 vs Pandemi COVID-19",
                          "Perubahan TPT (poin persen) di sekitar masing-masing periode krisis, per wilayah.")

@@ -22,9 +22,6 @@ st.caption(f"Sumber: {config.SUMBER_PENDAMPING}")
 
 tab1, tab2 = st.tabs(["TPT Menurut Karakteristik", "Karakteristik Pekerja"])
 
-# =====================================================================
-# TAB 1 — Table 4: TPT menurut gender / wilayah / pendidikan
-# =====================================================================
 with tab1:
     tpt_total = table4[table4["kategori"].isna()].iloc[0]
     st.markdown(
@@ -75,9 +72,6 @@ with tab1:
         utils.tabel_rapi(table4, height=230)
         utils.tombol_unduh_csv(table4, "table4_karakteristik_tpt.csv", key="dl_table4")
 
-# =====================================================================
-# TAB 2 — Table 5: karakteristik pekerja
-# =====================================================================
 with tab2:
     st.markdown(
         '<div class="warning-box">Bagian <b>"Lapangan Usaha"</b> pada Table 5 hanya terisi untuk '

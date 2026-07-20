@@ -17,7 +17,6 @@ utils.page_header(
     "TPT & penyerapan tenaga kerja per Kabupaten/Kota — bukan cuma angka provinsi.",
 )
 
-# ── Kartu ringkasan: Februari 2026 vs Februari 2025 ───────────────
 tpt_row = table4[table4["kategori"].isna()].iloc[0]
 tpt_26, tpt_25 = tpt_row["Feb 2026"], tpt_row["Feb 2025"]
 
@@ -39,7 +38,6 @@ col4.metric("Penduduk Bekerja", f"{bekerja_26:.2f} juta", f"{(bekerja_26 - beker
 st.caption(f"Sumber: {config.SUMBER_PENDAMPING}")
 st.markdown("")
 
-# ── Peta sebaran singkat ───────────────────────────────────────
 with st.container(border=True):
     col_map, col_side = st.columns([3, 2])
     with col_map:
@@ -73,7 +71,6 @@ with st.container(border=True):
 
 st.markdown("")
 
-# ── Navigasi ────────────────────────────────────────────────────
 utils.section_label("Navigasi", "Jelajahi Dashboard")
 nav_cols = st.columns(3)
 halaman = [

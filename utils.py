@@ -1,11 +1,3 @@
-"""
-utils.py
---------
-Fungsi tampilan (CSS, komponen UI, tabel, unduh, choropleth helper) yang
-dipakai bersama oleh Home.py dan seluruh halaman di pages/. Dipisah dari
-data_loader.py (yang khusus baca/transformasi data) agar tiap modul
-punya satu tanggung jawab jelas.
-"""
 
 import io
 
@@ -14,11 +6,7 @@ import streamlit as st
 
 import config
 
-
 def apply_style():
-    """Suntikkan CSS SaaS-style. Panggil sekali di awal SETIAP halaman
-    (st.set_page_config lalu apply_style()), karena Streamlit multipage
-    me-reset DOM tiap halaman — CSS dari Home.py tidak otomatis terbawa."""
     st.markdown(f"""
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
@@ -158,7 +146,6 @@ def apply_style():
         }}
         div[data-testid="stMetricDelta"] {{ justify-content: center; }}
         
-
         .stat-card {{
             background-color: {config.COLOR_CARD}; border: 1px solid {config.COLOR_BORDER};
             border-radius: 14px; padding: 22px 20px; text-align: center;
@@ -374,9 +361,7 @@ def apply_style():
     </style>
     """, unsafe_allow_html=True)
 
-
 def page_header(eyebrow: str, title: str, subtitle: str = ""):
-    """Header halaman konsisten: eyebrow kecil, judul besar, subjudul abu-abu."""
     st.markdown(
         f"""
         <div class="page-eyebrow">{eyebrow}</div>
@@ -386,7 +371,6 @@ def page_header(eyebrow: str, title: str, subtitle: str = ""):
         unsafe_allow_html=True,
     )
     st.markdown("")
-
 
 def section_label(label: str, title: str, desc: str = None) -> None:
     st.markdown(
@@ -398,17 +382,13 @@ def section_label(label: str, title: str, desc: str = None) -> None:
         unsafe_allow_html=True,
     )
 
-
 def judul_tabel(teks: str) -> None:
     st.markdown(f'<div class="table-caption"><span class="dot"></span>{teks}</div>', unsafe_allow_html=True)
 
-
 def tombol_unduh_csv(df: pd.DataFrame, nama_file: str, label: str = "Unduh CSV", key: str = None) -> None:
-    """Tombol unduh CSV dengan BOM UTF-8 supaya karakter tampil benar di Excel Indonesia."""
     buffer = io.StringIO()
     df.to_csv(buffer, index=False)
     st.download_button(label=label, data="\ufeff" + buffer.getvalue(), file_name=nama_file, mime="text/csv", key=key)
-
 
 def _format_nilai(v, jenis: str) -> str:
     if pd.isna(v):
@@ -425,12 +405,7 @@ def _format_nilai(v, jenis: str) -> str:
         return f"{v:,.2f}"
     return str(v)
 
-
 def tabel_rapi(df: pd.DataFrame, kolom: list = None, height: int = None) -> None:
-    """Tabel HTML custom (bukan st.dataframe) dengan label kolom Indonesia,
-    format sesuai jenis data, header rata tengah, dan kolom yang menyesuaikan
-    lebar kontainer (tidak perlu digeser horizontal). st.dataframe (canvas-based)
-    tidak bisa diberi gaya CSS sedetail ini, makanya dibangun manual."""
     import html as _html
 
     tampil = [c for c in (kolom or df.columns) if c not in config.KOLOM_TERSEMBUNYI]
@@ -463,9 +438,6 @@ def tabel_rapi(df: pd.DataFrame, kolom: list = None, height: int = None) -> None
 
 def metric_like(label: str, value: str, delta: str = None, delta_positif: bool = True,
                  help_text: str = None, value_font_size: str = "1.9rem") -> None:
-    """Tiruan st.metric dengan HTML custom penuh — dipakai saat value bisa
-    sangat panjang (mis. nama sektor) sehingga font value perlu dikecilkan
-    tanpa mengubah ukuran st.metric bawaan di halaman lain."""
     delta_html = ""
     if delta:
         warna = config.COLOR_SUCCESS if delta_positif else config.COLOR_DANGER
@@ -485,8 +457,6 @@ def metric_like(label: str, value: str, delta: str = None, delta_positif: bool =
     )
 
 def stat_card(label: str, value: str, delta: str = None, delta_positif: bool = True, help_text: str = None) -> None:
-    """Kartu statistik custom (pengganti st.metric untuk nilai teks panjang
-    seperti nama sektor) — teks bisa membungkus ke baris baru, tidak terpotong."""
     delta_html = ""
     if delta:
         warna = config.COLOR_SUCCESS if delta_positif else config.COLOR_DANGER
@@ -505,24 +475,18 @@ def stat_card(label: str, value: str, delta: str = None, delta_positif: bool = T
         unsafe_allow_html=True,
     )
 
-
 def flatten_koordinat(coords):
-    """Turunkan rekursif array koordinat GeoJSON (Polygon/MultiPolygon) jadi pasangan (lon, lat)."""
     if coords and isinstance(coords[0], (int, float)):
         yield (coords[0], coords[1])
     else:
         for sub in coords:
             yield from flatten_koordinat(sub)
 
-
 def tier_badge_html(tier: str) -> str:
     warna = config.TIER_RISIKO_WARNA.get(tier, config.COLOR_MUTED)
     return f'<span class="tier-badge" style="background-color:{warna}">{tier}</span>'
 
-
 def guard_data_loaded():
-    """Panggil di awal tiap halaman pages/*.py — hentikan render kalau
-    Home.py belum pernah dibuka (session_state['data'] belum terisi)."""
     if "data" not in st.session_state:
         st.warning("Silakan buka halaman **Home** terlebih dahulu agar data termuat ke sesi ini.")
         st.stop()

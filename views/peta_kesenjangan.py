@@ -15,7 +15,6 @@ st.markdown("<div style='margin-top: 40px;'></div>", unsafe_allow_html=True)
 utils.page_header("Sebaran Wilayah", "Peta & Kesenjangan Antar Kab/Kota",
                    "TPT, Upah, dan Composite Index untuk 38 Kabupaten/Kota — 2025")
 
-# ── Composite Index interaktif ───────────────────────────────────
 with st.container(border=True):
     utils.section_label("Composite Index", "Atur Bobot TPT vs Upah",
                          "Default 50/50 sesuai desain Tahap 4 — geser untuk eksplorasi skenario lain.")
@@ -50,7 +49,6 @@ with st.container(border=True):
 
 st.markdown("")
 
-# ── Peta Choropleth ───────────────────────────────────────────────
 with st.container(border=True):
     head_l, head_r = st.columns([5, 1])
     with head_l:
@@ -76,10 +74,8 @@ with st.container(border=True):
     )
     st.plotly_chart(fig_map, width="stretch", config=config.plotly_config("peta_tpt_kabkota_2025"))
     
-
 st.markdown("")
 
-# ── Compare Mode ──────────────────────────────────────────────────
 with st.container(border=True):
     utils.section_label("Compare Mode", "Bandingkan Dua Kab/Kota")
 

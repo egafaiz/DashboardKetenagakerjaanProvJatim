@@ -11,7 +11,6 @@ data = utils.guard_data_loaded()
 sektor = data["sektor_long"].copy()
 KOL_SEKTOR = "Lapangan Pekerjaan Utama"
 
-
 st.markdown("<div style='margin-top: 40px;'></div>", unsafe_allow_html=True)
 utils.page_header(
     "Komposisi Lapangan Usaha · Level Provinsi",
@@ -24,7 +23,6 @@ sektor_terbaru = sektor[sektor["tahun"] == tahun_terbaru].sort_values("Bekerja",
 total_bekerja = sektor_terbaru["Bekerja"].sum()
 sektor_terbaru["persen"] = sektor_terbaru["Bekerja"] / total_bekerja * 100
 
-# ── Metrik ringkas ────────────────────────────────────────────
 sektor_top = sektor_terbaru.iloc[0]
 col1, col2, col3 = st.columns(3)
 with col1:
@@ -38,7 +36,6 @@ col3.metric(f"Total Penduduk Bekerja ({tahun_terbaru})", f"{total_bekerja:,.0f}"
 
 st.markdown("")
 
-# ── Komposisi sektor tahun terbaru ────────────────────────────
 with st.container(border=True):
     head_l, head_r = st.columns([5, 1])
     with head_l:
@@ -64,7 +61,6 @@ with st.container(border=True):
 
 st.markdown("")
 
-# ── Tren pangsa sektor 2023-2025 ───────────────────────────────
 with st.container(border=True):
     utils.section_label("Tren", "Pergeseran Pangsa Sektor, 2023–2025",
                          "5 sektor dengan penyerapan terbesar pada tahun terbaru, ditelusuri sepanjang waktu.")

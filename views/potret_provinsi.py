@@ -20,7 +20,6 @@ utils.page_header(
     "Kondisi ketenagakerjaan Jawa Timur secara agregat — TPT, TPAK, dan tren historis 2008–2025.",
 )
 
-# ── Metrik utama: tahun terbaru vs tahun sebelumnya ───────────────
 tpt_25, tpt_24 = rd.loc["TPT", "Agustus 2025"], rd.loc["TPT", "Agustus 2024"]
 tpak_25, tpak_24 = rd.loc["TPAK", "Agustus 2025"], rd.loc["TPAK", "Agustus 2024"]
 bekerja_25, bekerja_24 = rd.loc["Bekerja", "Agustus 2025"], rd.loc["Bekerja", "Agustus 2024"]
@@ -37,7 +36,6 @@ col4.metric("Angkatan Kerja", f"{angkatan_kerja_25:,.0f}".replace(",", "."),
 st.caption(f"Sumber: {config.SUMBER_PRIMER}")
 st.markdown("")
 
-# ── Poin penting ──────────────────────────────────────────────
 delta_tpt = tpt_25 - tpt_24
 arah_tpt = "membaik (menurun)" if delta_tpt < 0 else "memburuk (meningkat)" if delta_tpt > 0 else "stabil"
 delta_tpak = tpak_25 - tpak_24
@@ -54,7 +52,6 @@ with st.container(border=True):
 
 st.markdown("")
 
-# ── Tren historis TPT & TPAK provinsi (2008-2025) ────────────────
 with st.container(border=True):
     utils.section_label("Historis", "Tren TPT & TPAK Provinsi (2008–2025)",
                          "Rata-rata agregasi 38 kab/kota, hasil olah BPS Web API.")
@@ -98,7 +95,6 @@ with st.container(border=True):
 
 st.markdown("")
 
-# ── Tren semesteran gabungan Primer + Pendamping ──────────────────
 with st.container(border=True):
     utils.section_label("Gabungan Sumber", "Tren Semesteran TPT & TPAK (Agustus + Februari)")
 
@@ -124,7 +120,6 @@ with st.container(border=True):
 
 st.markdown("")
 
-# ── Tabel detail Ringkasan_Prov ───────────────────────────────────
 with st.container(border=True):
     utils.section_label("Data", "Data Mentah — Potret Provinsi")
     utils.tabel_rapi(ringkasan_prov)
