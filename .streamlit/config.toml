@@ -1,0 +1,13 @@
+# Mengunci dashboard selalu pakai tema TERANG, apa pun setting dark mode
+# di browser/OS pengguna. Tanpa ini, Streamlit otomatis ikut preferensi
+# sistem (mis. Windows/Chrome dark mode) dan warna teks default berubah
+# jadi terang, sehingga tabrakan dengan background terang custom kita
+# (judul & teks jadi nyaris tak terlihat).
+
+[theme]
+base = "light"
+primaryColor = "#2563EB"
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#F8F9FA"
+textColor = "#1F2937"
+font = "sans serif"
