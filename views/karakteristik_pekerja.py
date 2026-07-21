@@ -15,8 +15,8 @@ st.markdown("<div style='margin-top: 40px;'></div>", unsafe_allow_html=True)
 utils.page_header(
     "Gender · Pendidikan · Formal-Informal · Level Provinsi",
     "Karakteristik Pekerja",
-    "TPT menurut karakteristik demografis (Table 4) dan komposisi pekerja menurut status "
-    "& pendidikan (Table 5) — Data Pendamping BPS Jatim, Februari 2024–2026.",
+    "TPT menurut karakteristik demografis dan komposisi pekerja menurut status "
+    "& pendidikan.",
 )
 st.caption(f"Sumber: {config.SUMBER_PENDAMPING}")
 
@@ -61,9 +61,9 @@ with tab1:
         tertinggi = pend.loc[pend["Feb 2026"].idxmax()]
         st.markdown(
             f"TPT tertinggi pada Februari 2026 justru berada pada lulusan "
-            f"**{tertinggi['Karakteristik'].replace('– ', '')}** ({tertinggi['Feb 2026']:.2f}%), bukan "
+            f"{tertinggi['Karakteristik'].replace('– ', '')} ({tertinggi['Feb 2026']:.2f}%), bukan "
             f"jenjang pendidikan terendah — mengindikasikan mismatch antara kualifikasi pendidikan dan "
-            f"ketersediaan lapangan kerja yang sesuai, konsisten dengan temuan EDA Tahap 3."
+            f"ketersediaan lapangan kerja yang sesuai."
         )
 
     st.markdown("")
