@@ -10,6 +10,8 @@ data = utils.guard_data_loaded()
 
 table4 = data["table4"].copy()
 table5 = data["table5"].copy()
+tpt_umur_prov = data["tpt_umur_provinsi"].copy()
+tpt_umur_kk = data["tpt_umur_kabkota"].copy()
 
 st.markdown("<div style='margin-top: 40px;'></div>", unsafe_allow_html=True)
 utils.page_header(
@@ -20,7 +22,7 @@ utils.page_header(
 )
 st.caption(f"Sumber: {config.SUMBER_PENDAMPING}")
 
-tab1, tab2 = st.tabs(["TPT Menurut Karakteristik", "Karakteristik Pekerja"])
+tab1, tab2, tab3 = st.tabs(["TPT Menurut Karakteristik", "Karakteristik Pekerja", "TPT Menurut Usia"])
 
 with tab1:
     tpt_total = table4[table4["kategori"].isna()].iloc[0]
@@ -139,3 +141,52 @@ with tab2:
         utils.section_label("Data", "Data Mentah")
         utils.tabel_rapi(table5, height=230)
         utils.tombol_unduh_csv(table5, "table5_karakteristik_pekerja.csv", key="dl_table5")
+
+with tab3:
+    st.caption(f"Sumber: {config.SUMBER_DETAIL_AGUSTUS}")
+
+    tpt_muda = tpt_umur_prov.iloc[0]
+    tpt_total = tpt_umur_prov.iloc[-1]
+    st.markdown(
+        f'<div class="warning-box">TPT usia <b>15–24 tahun</b>: <b>{tpt_muda["TPT"]:.2f}%</b> — '
+        f'{tpt_muda["TPT"] / tpt_total["TPT"]:.1f}× lipat dari TPT total provinsi '
+        f'({tpt_total["TPT"]:.2f}%), Agustus 2025.</div>',
+        unsafe_allow_html=True,
+    )
+
+    with st.container(border=True):
+        utils.section_label("Provinsi", "TPT Menurut Kelompok Usia")
+        data_chart = tpt_umur_prov.iloc[:-1]  # exclude baris "Jumlah/Total"
+        fig = go.Figure(go.Bar(
+            x=data_chart["Golongan_Umur"], y=data_chart["TPT"],
+            marker_color=config.COLOR_PRIMARY, text=data_chart["TPT"].map("{:.2f}%".format),
+            textposition="outside",
+        ))
+        fig.add_hline(y=tpt_total["TPT"], line_dash="dash", line_color=config.COLOR_MUTED,
+                      annotation_text=f"Rata-rata provinsi ({tpt_total['TPT']:.2f}%)")
+        fig.update_layout(
+            height=340, margin=dict(t=30, l=10, r=10, b=10), yaxis_title="TPT (%)",
+            font_family=config.FONT_BODY, font_color=config.COLOR_INK,
+            paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
+            yaxis=dict(gridcolor=config.COLOR_BORDER),
+        )
+        st.plotly_chart(fig, width="stretch", config=config.plotly_config("tpt_umur_provinsi"))
+
+    st.markdown("")
+    with st.container(border=True):
+        utils.section_label("Kab/Kota", "TPT Usia Muda (15–24 Tahun) per Wilayah")
+        muda = tpt_umur_kk[tpt_umur_kk["Golongan_Umur"] == "15-24"].sort_values("TPT", ascending=False)
+        col_top, col_bottom = st.columns(2)
+        with col_top:
+            utils.judul_tabel("5 Wilayah Tertinggi")
+            utils.tabel_rapi(muda.head(5), kolom=["Kabupaten/Kota", "TPT"])
+        with col_bottom:
+            utils.judul_tabel("5 Wilayah Terendah")
+            utils.tabel_rapi(muda.tail(5), kolom=["Kabupaten/Kota", "TPT"])
+
+    st.markdown("")
+    with st.container(border=True):
+        utils.section_label("Data", "Data Mentah")
+        pivot_umur = tpt_umur_kk.pivot(index="Kabupaten/Kota", columns="Golongan_Umur", values="TPT").reset_index()
+        utils.tabel_rapi(pivot_umur, height=230)
+        utils.tombol_unduh_csv(tpt_umur_kk, "tpt_umur_kabkota_agustus2025.csv", key="dl_tpt_umur")

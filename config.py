@@ -14,7 +14,10 @@ GEOJSON_FEATURE_ID_KEY = "properties.Kabupaten/Kota"
 
 SUMBER_PRIMER = "BPS Jatim – Keadaan Angkatan Kerja Jatim, Agustus 2025 (rilis 17 Maret 2026)"
 SUMBER_PENDAMPING = "BPS Jatim – BRS Jumlah Angkatan Kerja Jatim, Februari 2026 (rilis 5 Mei 2026)"
+PATH_TPT_UMUR_PROVINSI = DATA_DIR / "tpt_umur_provinsi_agustus2025.parquet"
+PATH_TPT_UMUR_KABKOTA = DATA_DIR / "tpt_umur_kabkota_agustus2025.parquet"
 SUMBER_API_BPS = "BPS Web API (webapi.bps.go.id), domain Jawa Timur — TPT var_id 54, TPAK var_id 277"
+SUMBER_DETAIL_AGUSTUS = "BPS Jatim – Keadaan Angkatan Kerja Provinsi Jawa Timur, Agustus 2025 (Tabel 17, 35, 116)"
 TANGGAL_UPDATE_DASHBOARD = "Juli 2026"
 
 COLOR_PRIMARY = "#2563EB"
@@ -73,6 +76,8 @@ LABEL_KOLOM = {
     "kenaikan_3th": "Perubahan 3 Tahun Terakhir (poin)",
     "naik_terus_3th": "Naik Berturut 3 Tahun",
     "is_interpolasi": "Nilai Interpolasi (2016)",
+    "Golongan_Umur": "Kelompok Usia",
+    "Angkatan_Kerja": "Angkatan Kerja", "Bekerja": "Penduduk Bekerja", "Pengangguran": "Pengangguran",
     "is_interpolasi_tpt": "TPT Interpolasi (2016)", "is_interpolasi_tpak": "TPAK Interpolasi (2016)",
     "Bekerja 2023": "Bekerja 2023", "Bekerja 2024": "Bekerja 2024", "Bekerja 2025": "Bekerja 2025",
     "Pengangguran 2023": "Pengangguran 2023", "Pengangguran 2024": "Pengangguran 2024", "Pengangguran 2025": "Pengangguran 2025",
@@ -97,6 +102,7 @@ FORMAT_KOLOM = {
     "Bekerja": "angka", "Pengangguran": "angka",
     "Bekerja 2023": "angka", "Bekerja 2024": "angka", "Bekerja 2025": "angka",
     "Pengangguran 2023": "angka", "Pengangguran 2024": "angka", "Pengangguran 2025": "angka",
+    "Angkatan_Kerja": "angka", "Bekerja": "angka", "Pengangguran": "angka",
     "selisih_TPT_vs_prov": "angka", "selisih_Upah_vs_ratarata": "rupiah",
     "Feb 2024": "persen", "Feb 2025": "persen", "Feb 2026": "persen", "Perubahan (persen poin)": "angka",
     "Jumlah 2024 (juta)": "angka", "Jumlah 2025 (juta)": "angka", "Jumlah 2026 (juta)": "angka",

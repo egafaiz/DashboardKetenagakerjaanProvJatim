@@ -48,6 +48,14 @@ def load_skor_risiko() -> pd.DataFrame:
     return pd.read_parquet(config.DATA_DIR / "skor_risiko_kabkota_2025.parquet")
 
 @st.cache_data(show_spinner=False)
+def load_tpt_umur_provinsi() -> pd.DataFrame:
+    return pd.read_parquet(config.PATH_TPT_UMUR_PROVINSI)
+
+@st.cache_data(show_spinner=False)
+def load_tpt_umur_kabkota() -> pd.DataFrame:
+    return pd.read_parquet(config.PATH_TPT_UMUR_KABKOTA)
+
+@st.cache_data(show_spinner=False)
 def load_ringkasan_feb() -> pd.DataFrame:
     df = pd.read_excel(config.PATH_PENDAMPING, sheet_name="Table 1")
     df = df.set_index(df.columns[0])
@@ -97,6 +105,8 @@ def load_all() -> dict:
         "sektor_long": load_sektor_long(),
         "table4": load_table4(),
         "table5": load_table5(),
+        "tpt_umur_provinsi": load_tpt_umur_provinsi(),
+        "tpt_umur_kabkota": load_tpt_umur_kabkota(),
         "historis_gabungan": load_historis_gabungan(),
         "profil_volatilitas": load_profil_volatilitas(),
         "skor_risiko": load_skor_risiko(),
