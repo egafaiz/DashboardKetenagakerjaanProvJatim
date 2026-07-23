@@ -96,7 +96,7 @@ with st.container(border=True):
 st.markdown("")
 
 with st.container(border=True):
-    utils.section_label("Gabungan Sumber", "Tren Semesteran TPT & TPAK (Agustus + Februari)")
+    utils.section_label("Gabungan Sumber", "Tren Semesteran TPT & TPAK")
 
     fig2 = go.Figure()
     fig2.add_trace(go.Scatter(

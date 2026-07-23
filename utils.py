@@ -491,3 +491,10 @@ def guard_data_loaded():
         st.warning("Silakan buka halaman **Home** terlebih dahulu agar data termuat ke sesi ini.")
         st.stop()
     return st.session_state["data"]
+
+def clean_layout(fig):
+    """Terapkan ke semua fig Plotly sebelum st.plotly_chart() — matikan
+    gridlines dan bikin tampilan lebih bersih, konsisten di seluruh dashboard."""
+    fig.update_xaxes(showgrid=False, zeroline=False)
+    fig.update_yaxes(showgrid=False, zeroline=False)
+    return fig

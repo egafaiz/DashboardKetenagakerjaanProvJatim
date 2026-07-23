@@ -52,6 +52,7 @@ with tab1:
                     paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
                     yaxis=dict(gridcolor=config.COLOR_BORDER),
                 )
+                fig = utils.clean_layout(fig)
                 st.plotly_chart(fig, width="stretch", config=config.plotly_config(f"tpt_{kategori}"))
             with col_table:
                 utils.tabel_rapi(sub, kolom=["Karakteristik", "Feb 2024", "Feb 2025", "Feb 2026", "Perubahan (persen poin)"])
@@ -104,6 +105,7 @@ with tab2:
             fig.update_layout(height=440, margin=dict(t=10, l=10, r=10, b=10),
                                font_family=config.FONT_BODY,
                                paper_bgcolor="rgba(0,0,0,0)")
+            fig = utils.clean_layout(fig)
             st.plotly_chart(fig, width="stretch", config=config.plotly_config("lapangan_usaha_feb2026"))
         else:
             fig = go.Figure()
@@ -118,6 +120,7 @@ with tab2:
                 paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
                 yaxis=dict(gridcolor=config.COLOR_BORDER),
             )
+            fig = utils.clean_layout(fig)
             st.plotly_chart(fig, width="stretch", config=config.plotly_config(f"karakteristik_{kategori_pilih}"))
 
         kolom_tampil = ["Karakteristik"] + [c for c in sub5.columns if c not in ("Karakteristik", "kategori")
@@ -170,6 +173,7 @@ with tab3:
             paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
             yaxis=dict(gridcolor=config.COLOR_BORDER),
         )
+        fig = utils.clean_layout(fig)
         st.plotly_chart(fig, width="stretch", config=config.plotly_config("tpt_umur_provinsi"))
 
     st.markdown("")
