@@ -95,7 +95,7 @@ with st.container(border=True):
 st.markdown("")
 
 with st.container(border=True):
-    utils.section_label("Dampak Krisis", "Krisis Finansial 2008 vs Pandemi COVID-19",
+    utils.section_label("Dampak Krisis", "Krisis 2008 vs Pandemi COVID-19",
                          "Perubahan TPT (poin persen) di sekitar masing-masing periode krisis, per wilayah.")
 
     top_terdampak_covid = profil_vol.sort_values("delta_TPT_covid", ascending=False).head(10)

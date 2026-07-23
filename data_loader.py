@@ -63,6 +63,10 @@ def load_ringkasan_feb() -> pd.DataFrame:
     return df
 
 @st.cache_data(show_spinner=False)
+def load_forecast() -> pd.DataFrame:
+    return pd.read_parquet(config.DATA_DIR / "forecast_tpt_tpak_2026_2028.parquet")
+
+@st.cache_data(show_spinner=False)
 def load_tren_provinsi_gabungan() -> pd.DataFrame:
     df_primer = load_ringkasan_prov().set_index("Jenis Kegiatan")
     kolom_agustus = [c for c in df_primer.columns if str(c).startswith("Agustus")]
@@ -108,6 +112,7 @@ def load_all() -> dict:
         "tpt_umur_provinsi": load_tpt_umur_provinsi(),
         "tpt_umur_kabkota": load_tpt_umur_kabkota(),
         "historis_gabungan": load_historis_gabungan(),
+        "forecast": load_forecast(),
         "profil_volatilitas": load_profil_volatilitas(),
         "skor_risiko": load_skor_risiko(),
         "tren_provinsi": load_tren_provinsi_gabungan(),

@@ -9,6 +9,7 @@ data = utils.guard_data_loaded()
 
 skor_risiko = data["skor_risiko"].copy()
 profil_vol = data["profil_volatilitas"].copy()
+master_kabkota = data["master_kabkota"].copy()
 
 st.markdown("<div style='margin-top: 40px;'></div>", unsafe_allow_html=True)
 utils.page_header(
@@ -68,6 +69,71 @@ with st.container(border=True):
 
 st.markdown("")
 
+st.markdown("")
+
+with st.container(border=True):
+    utils.section_label(
+        "Rasio vs Jumlah", "Skala vs Jumlah",
+        "TPT (%) itu rasio — wilayah dengan populasi besar bisa punya jumlah pengangguran "
+        "jauh lebih banyak walau persentasenya kelihatan rendah.",
+    )
+
+    mk = master_kabkota.copy()
+    mk["Angkatan_Kerja_2025"] = mk["Bekerja 2025"] + mk["Pengangguran 2025"]
+    rata2_tpt = mk["TPT 2025"].mean()
+    rata2_jumlah = mk["Pengangguran 2025"].mean()
+
+    def _kuadran(row):
+        tinggi_tpt = row["TPT 2025"] >= rata2_tpt
+        tinggi_jumlah = row["Pengangguran 2025"] >= rata2_jumlah
+        if tinggi_tpt and tinggi_jumlah: return "Prioritas Utama"
+        if tinggi_tpt and not tinggi_jumlah: return "Rasio Tinggi, Skala Kecil"
+        if not tinggi_tpt and tinggi_jumlah: return "Tersembunyi"
+        return "Prioritas Rendah"
+
+    mk["Kuadran"] = mk.apply(_kuadran, axis=1)
+    warna_kuadran = {
+        "Prioritas Utama": config.COLOR_DANGER, "Tersembunyi": config.COLOR_SECONDARY,
+        "Rasio Tinggi, Skala Kecil": config.COLOR_ACCENT, "Prioritas Rendah": config.COLOR_MUTED,
+    }
+
+    tersembunyi = mk[mk["Kuadran"] == "Tersembunyi"].sort_values("Pengangguran 2025", ascending=False)
+    if len(tersembunyi):
+        contoh = tersembunyi.iloc[0]
+        st.markdown(
+            f'<div class="warning-box"><b>{contoh["Kabupaten/Kota"]}</b>: TPT cuma '
+            f'{contoh["TPT 2025"]:.2f}% — tapi <b>{contoh["Pengangguran 2025"]:,.0f} orang</b> menganggur, '
+            f'salah satu jumlah terbesar se-Jatim. Skor risiko berbasis rasio tidak menangkap wilayah '
+            f'seperti ini.</div>',
+            unsafe_allow_html=True,
+        )
+
+    col_chart, col_table = st.columns([3, 2])
+    with col_chart:
+        fig = px.scatter(
+            mk, x="Pengangguran 2025", y="TPT 2025", color="Kuadran", size="Angkatan_Kerja_2025",
+            hover_name="Kabupaten/Kota", color_discrete_map=warna_kuadran,
+            labels={"Pengangguran 2025": "Jumlah Pengangguran (orang)", "TPT 2025": "TPT (%)"},
+        )
+        fig.add_hline(y=rata2_tpt, line_dash="dash", line_color=config.COLOR_MUTED,
+                      annotation_text=f"Rata-rata TPT ({rata2_tpt:.2f}%)")
+        fig.add_vline(x=rata2_jumlah, line_dash="dash", line_color=config.COLOR_MUTED)
+        fig.update_layout(
+            height=420, margin=dict(t=10, l=10, r=10, b=10),
+            legend=dict(orientation="h", y=1.15),
+            font_family=config.FONT_BODY, font_color=config.COLOR_INK,
+            paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
+            xaxis=dict(gridcolor=config.COLOR_BORDER), yaxis=dict(gridcolor=config.COLOR_BORDER),
+        )
+        st.plotly_chart(fig, width="stretch", config=config.plotly_config("kuadran_prioritas"))
+    with col_table:
+        utils.judul_tabel("Wilayah Kuadran \"Tersembunyi\"")
+        utils.tabel_rapi(
+            tersembunyi, kolom=["Kabupaten/Kota", "TPT 2025", "Pengangguran 2025"], height=420,
+        )
+    utils.tombol_unduh_csv(mk[["Kabupaten/Kota", "TPT 2025", "Pengangguran 2025", "Kuadran"]],
+                            "kuadran_prioritas_kabkota.csv", key="dl_kuadran")
+
 with st.container(border=True):
     utils.section_label("Volatilitas", "Profil Volatilitas & Dampak Krisis — Ringkasan",
                          "Lihat halaman Tren Terkini untuk visualisasi lengkap; tabel di bawah untuk referensi cepat.")
@@ -81,6 +147,12 @@ with st.container(border=True):
     top3 = skor_risiko.sort_values("skor_risiko", ascending=False).head(3)["Kabupaten/Kota"].tolist()
     top3_str = ", ".join(top3[:-1]) + f", dan {top3[-1]}" if len(top3) > 1 else top3[0]
 
+    tpt_umur = data["tpt_umur_provinsi"].copy()
+    tpt_umur_wilayah = tpt_umur[tpt_umur["Golongan_Umur"] != "Jumlah/Total"]
+    baris_termuda = tpt_umur_wilayah.sort_values("TPT", ascending=False).iloc[0]
+    tpt_prov_rata2 = tpt_umur[tpt_umur["Golongan_Umur"] == "Jumlah/Total"]["TPT"].iloc[0]
+    rasio_termuda = baris_termuda["TPT"] / tpt_prov_rata2
+
     rekomendasi_items = [
         dict(
             tag="Prioritas", warna="danger", glyph="!",
@@ -89,9 +161,18 @@ with st.container(border=True):
                 f"rata-rata provinsi selama 2 tahun terakhir.",
         ),
         dict(
+            tag="Temuan Utama", warna="danger", glyph="!",
+            judul="Pengangguran muda mendominasi, bukan merata",
+            isi=f"TPT usia {baris_termuda['Golongan_Umur']} tahun mencapai <strong>{baris_termuda['TPT']:.2f}%</strong> "
+                f"— sekitar {rasio_termuda:.1f}× rata-rata provinsi ({tpt_prov_rata2:.2f}%). Pengangguran di Jatim "
+                f"secara struktural adalah persoalan lulusan muda/fresh graduate, bukan tersebar merata di semua usia. "
+                f"Implikasi kebijakan: program pelatihan vokasi &amp; penempatan kerja perlu menyasar spesifik "
+                f"kelompok usia ini, bukan program pengentasan pengangguran generik.",
+        ),
+        dict(
             tag="Catatan", warna="warning", glyph="i",
             judul="Bukan sinyal krisis pasti",
-            isi="Skor bersifat relatif antar-wilayah pada satu tahun, sehingga perlu dikombinasikan "
+            isi="Skor risiko bersifat relatif antar-wilayah pada satu tahun, sehingga perlu dikombinasikan "
                 "dengan konteks lapangan (mis. penutupan industri besar, migrasi tenaga kerja) sebelum "
                 "menjadi dasar kebijakan.",
         ),
@@ -99,13 +180,20 @@ with st.container(border=True):
             tag="Insight", warna="primary", glyph="~",
             judul="Wilayah upah tinggi bukan otomatis paling sehat",
             isi="Korelasi Upah vs TPT 2025 justru positif (r≈0,55–0,60), pola <em>urban unemployment</em> "
-                "di daerah seperti Sidoarjo, Surabaya, dan Gresik.",
+                "di daerah seperti Sidoarjo, Surabaya, dan Gresik — upah tinggi tidak menjamin TPT rendah.",
         ),
         dict(
-            tag="Roadmap", warna="muted", glyph="…",
-            judul="Fitur what-if sengaja tidak disertakan",
-            isi="Simulasi proyeksi Upah vs TPT dianggap riskan secara statistik pada sampel 38 kab/kota "
-                "di v1 dashboard ini — masuk rencana pengembangan lanjutan.",
+            tag="Insight", warna="primary", glyph="~",
+            judul="Ketergantungan pada satu sektor",
+            isi="Sektor Pertanian, Kehutanan &amp; Perikanan menyerap 32,1% tenaga kerja Jatim — hampir "
+                "1 dari 3 pekerja bergantung pada satu sektor dari 17 sektor yang ada. Diversifikasi ke "
+                "sektor non-pertanian penting untuk ketahanan ekonomi daerah jangka panjang.",
+        ),
+        dict(
+            tag="Insight", warna="muted", glyph="~",
+            judul="Informalitas masih dominan",
+            isi="64,4% pekerja berstatus informal, hanya 35,6% formal. Perlindungan sosial dan program "
+                "formalisasi kerja perlu jadi perhatian, bukan hanya penyerapan tenaga kerja semata.",
         ),
     ]
 

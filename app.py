@@ -37,6 +37,7 @@ halaman = [
     st.Page("views/sektor_ekonomi.py", title="Sektor Ekonomi", icon=":material/factory:"),
     st.Page("views/karakteristik_pekerja.py", title="Karakteristik Pekerja", icon=":material/groups:"),
     st.Page("views/tren_terkini.py", title="Tren Terkini", icon=":material/trending_up:"),
+    st.Page("views/proyeksi.py", title="Proyeksi TPT & TPAK", icon=":material/query_stats:"),
     st.Page("views/insight_rekomendasi.py", title="Insight & Rekomendasi", icon=":material/lightbulb:"),
 ]
 
